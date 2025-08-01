@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>font_styleWeight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .font-center {
+            text-align: center;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        pre {
+            background-color: #f4f4f4;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        code {
+            font-family: monospace;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        } 
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="font-center">font_styleWeight</h1>
+    <h1 class="font_italic">font_styleWeight</h1>
+    <!-- <h1 class="text-align">font_styleWeight</h1> -->
+    <p class="font_italic">이 문서는 <code>font_styleWeight</code> 속성에 대한 설명을 제공합니다.</p>
+    <h2>개요</h2>
+    <p><code>font_styleWeight</code> 속성은 글꼴의 두께를 설정하는 데 사용됩니다. 이 속성은 CSS에서 글꼴의 가중을 조절하는 데 중요한 역할을 합니다.</p>
+    <h2>사용법</h2>
+    <p>이 속성은 다음과 같이 사용됩니다:</p>
+    <pre><code>font_styleWeight: normal | bold | bolder | lighter |
+100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;</code></pre>
+    <p>여기서 <code>normal</code>은 일반 두께, <code>bold</code>는 굵은 두께를 나타내며, 숫자는 100에서 900까지의 값을 가질 수 있습니다. 숫자가 클수록 글꼴이 더 두꺼워집니다.</p>
+    <h2>예제</h2>
+    <p>다음은 <code>font_styleWeight</code> 속성을 사용하는 예제입니다:</p>
+    <pre><code>p {
+    font_styleWeight: bold;
+}</code></pre>  
+    <p>위의 예제는 모든 <code>&lt;p&gt;</code> 요소에 대해 글꼴을 굵게 설정합니다.</p>
+    <h2>참고</h2>
+    <p>이 속성은 CSS3에서 도입되었으며, 다양한 브라우저에서 지원됩니다. 그러나 일부 구형 브라우저에서는 지원하지 않을 수 있으므로, 항상 호환성을 확인하는 것이 좋습니다.</p>
+    <h2>관련 링크</h2>
+    <ul>
+        <li><a href="https://www.w3.org/TR/css-fonts-3/#font-weight-prop">W3C CSS Fonts Module Level 3</a></li>
+        <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight">MDN Web Docs - font-weight</a></li>
+    </ul>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Absolute Position</title>
+
+    <style>
+        #container {
+            width: 500px; height: 300px;
+            border: 3px solid black;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .circle {
+            position: absolute;
+            width: 100px; height: 100px;
+            border-radius: 50% 50%;
+        }
+
+        #red {
+            background: rgb(33, 97, 140);
+            left: 20px; top: 20px;
+        }
+
+        #green {
+            background: rgb(112, 173, 71);
+            right: 20px; top: 20px;
+        }
+
+        #blue {
+            background: rgb(250, 128, 114);
+            right: 20px; bottom: 20px;
+        }
+
+        #yellow {
+            background: rgb(230, 230, 230);
+            left: 20px; bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="red" class="circle"></div>
+        <div id="green" class="circle"></div>
+        <div id="blue" class="circle"></div>
+        <div id="yellow" class="circle"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fixed Bar</title>
+    <style>
+        .container {
+            margin-top: 50px;
+            margin-left: 50px;
+        }
+
+        .top_bar {
+            background: rgb(255, 204, 186);
+
+            position: fixed;
+            left: 0; top: 0; right: 0;
+            height: 50px;
+        }
+
+        .left_bar {
+            background: rgb(200, 221, 182);
+
+            position: fixed;
+            left: 0; top: 50px; bottom: 0;
+            width: 50px;
+        }
+        .bottom_bar {
+            background: rgb(202, 224, 255);
+
+            position: fixed;
+            left: 0; bottom: 0; right: 0;
+            height: 50px;
+        }
+    </style>
+    <body>
+        <div class="top_bar"></div>
+        <div class="left_bar"></div>
+        <div class="bottom_bar"></div>
+        <div class="container">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ac urna vitae dolor pulvinar facilisis eget ac risus. Phasellus gravida non augue vitae rutrum. Ut vitae ligula lorem. Suspendisse gravida egestas faucibus.</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis unde eligendi quisquam consectetur dolor iure aliquid animi explicabo non eius repellat possimus beatae, modi, minus, libero qui reiciendis? Consectetur, officia.</p>
+    </body>
+</head>
+</html>
