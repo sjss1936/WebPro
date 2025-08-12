@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <script>
+      // This script is in strict mode
+      // and will throw an error if 'data' is not declared
+      (function() {
+        'use strict';
+        data = 10; // This will throw a ReferenceError
+      })();
+    </script>
+    <script>
+      // This script is not in strict mode
+      // and will not throw an error if 'data' is not declared
+      'use strict'
+      data = 10
+      console.log(data)
+    </script>
+  </head>
+  <body></body>
+</html>
