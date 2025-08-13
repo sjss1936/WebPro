@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>단위 변환기</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        let 현재값 = 0
+        let 변환상수 = 0.01
+
+        const select = document.querySelector('select')
+        const input = document.querySelector('input')
+        const span = document.querySelector('span')
+
+        const cal = () => {
+          if (isNaN(현재값)) {
+            span.textContent = ''
+          } else {
+            span.textContent = (현재값 * 변환상수).toFixed(2)
+          }
+        }
+
+        select.addEventListener('change', (event) => {
+          const options = event.currentTarget.options
+          const index = event.currentTarget.selectedIndex
+          변환상수 = Number(options[index].value)
+          cal()
+        })
+
+        input.addEventListener('input', (event) => {
+          현재값 = Number(event.currentTarget.value)
+          cal()
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <h1>단위 변환기 (cm → 선택 단위)</h1>
+    <input type="number" step="any" placeholder="숫자 입력"> cm =
+    <span></span>
+    <select>
+      <option value="0.01">미터</option>
+      <option value="0.001">킬로미터</option>
+      <option value="0.00001">마일</option>
+      <option value="0.0001">야드</option>
+      <option value="0.1">피트</option>
+      <option value="0.01">인치</option>
+    </select>
+  </body>
+</html>

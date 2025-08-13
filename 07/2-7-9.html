@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        let [timer, timerId] = [0, 0]
+        const h1 = document.querySelector('h1')
+        const checkbox = document.querySelector('input')
+
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            timerId = setInterval(() => {
+              timer += 1
+              h1.textContent = `${timer} sec`
+            }, 1000)
+          } else {
+            clearInterval(timerId)
+            h1.textContent = 'Timer stopped'
+          }
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <h1> </h1>
+    <input type="checkbox">
+    <span>Start</span>
+  </body>
+</html>

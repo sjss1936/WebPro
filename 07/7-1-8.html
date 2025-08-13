@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <style>
+      @keyframes gradientBackground {
+        0% {
+          background: linear-gradient(135deg, navy, purple);
+        }
+        50% {
+          background: linear-gradient(135deg, purple, magenta);
+        }
+        100% {
+          background: linear-gradient(135deg, magenta, navy);
+        }
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const header = document.createElement('h1')
+
+        header.textContent = '안녕하세요'
+        header.setAttribute('data-custom', '사용자 정의 속성')
+        
+        // 텍스트 스타일
+        header.style.color = 'white';
+        header.style.fontSize = '24px';
+        header.style.textAlign = 'center';
+        header.style.padding = '20px';
+
+        header.style.animation = 'gradientBackground 8s ease infinite'
+        header.style.backgroundSize = '400% 400%'
+
+        document.body.appendChild(header)
+      })
+    </script>
+  </head>
+  <body style="margin:0; background:black;">
+
+  </body>
+</html>

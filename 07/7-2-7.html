@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>음식 선택</title>
+    <style>
+      select {
+        width: 200px;
+        height: 150px; /* 여러 개 선택 가능한 높이 */
+        font-size: 16px;
+        padding: 8px;
+        border-radius: 8px;
+        border: 2px solid #4A90E2;
+        background-color: #f0f8ff;
+        color: #333;
+        box-shadow: 0 2px 5px rgba(74, 144, 226, 0.3);
+        outline: none;
+      }
+      select:focus {
+        border-color: #357ABD;
+        box-shadow: 0 0 8px #357ABD;
+      }
+      option {
+        padding: 6px;
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const select = document.querySelector('select');
+        const p = document.querySelector('p');
+
+        select.addEventListener('change', (event) => {
+          const options = event.currentTarget.options;
+          const list = [];
+          for (const option of options) {
+            if (option.selected) {
+              list.push(option.textContent);
+            }
+          }
+          p.textContent = `선택: ${list.join(', ')}`;
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>좋아하는 음식 선택</h1>
+    <select multiple>
+      <option>떡볶이</option>
+      <option>순대</option>
+      <option>오뎅</option>
+      <option>튀김</option>
+    </select>
+    <p>선택: </p>
+  </body>
+</html>

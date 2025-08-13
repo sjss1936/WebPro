@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>할 일 목록 + Doughnut 차트 연동</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding-top: 30px;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    #todo {
+      padding: 10px 15px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      width: 250px;
+      margin-right: 10px;
+      font-size: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    #add-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(45deg, #00c6ff, #0072ff);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    #add-button:hover {
+      box-shadow: 0 0 15px #00c6ff, 0 0 25px #0072ff;
+      transform: scale(1.05);
+    }
+    #todo-list {
+      margin-top: 30px;
+      width: 300px;
+    }
+    .todo-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      transition: background 0.3s;
+    }
+    .todo-item.checked {
+      background: rgba(0, 200, 255, 0.2);
+      text-decoration: line-through;
+    }
+    .todo-item span {
+      flex: 1;
+      margin-left: 10px;
+    }
+    .todo-item button {
+      border: none;
+      background: crimson;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .todo-item button:hover {
+      background: darkred;
+    }
+    .chart-container {
+      margin-top: 50px;
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 할 일 목록 & 도넛 차트</h1>
+  <div>
+    <input id="todo" placeholder="할 일을 입력하세요" />
+    <button id="add-button">추가</button>
+  </div>
+  <div id="todo-list"></div>
+
+  <div class="chart-container">
+    <canvas id="myChart" width="300" height="300"></canvas>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.querySelector('#todo');
+      const todoList = document.querySelector('#todo-list');
+      const addButton = document.querySelector('#add-button');
+
+      // 색상 팔레트 (필요 시 늘려도 됨)
+      const colors = [
+        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+        '#FF9F40', '#FFCD56', '#C9CBCF', '#36A2EB', '#00C49F'
+      ];
+
+      // 차트 초기화
+      const ctx = document.getElementById('myChart').getContext('2d');
+      const myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: [],
+          datasets: [{
+            label: '할 일 데이터',
+            data: [],
+            backgroundColor: [],
+            borderWidth: 1,
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: { color: 'white' },
+            },
+            title: {
+              display: true,
+              text: '할 일 상태 도넛 차트',
+              color: 'white',
+            },
+          },
+        },
+      });
+
+      // 할 일 추가 함수
+      const addTodo = () => {
+        const value = input.value.trim();
+        if (!value) {
+          alert('할 일을 입력해주세요.');
+          return;
+        }
+
+        // DOM 생성
+        const item = document.createElement('div');
+        item.classList.add('todo-item');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+
+        const text = document.createElement('span');
+        text.textContent = value;
+
+        const button = document.createElement('button');
+        button.textContent = '삭제';
+
+        // 체크박스 변경 이벤트 (완료 체크)
+        checkbox.addEventListener('change', () => {
+          item.classList.toggle('checked', checkbox.checked);
+          // 필요시 차트 데이터 업데이트 가능
+        });
+
+        // 삭제 이벤트 (차트 데이터도 삭제)
+        button.addEventListener('click', () => {
+          // 삭제할 인덱스 찾기
+          const idx = Array.from(todoList.children).indexOf(item);
+          if (idx > -1) {
+            // 차트 데이터 제거
+            myChart.data.labels.splice(idx, 1);
+            myChart.data.datasets[0].data.splice(idx, 1);
+            myChart.data.datasets[0].backgroundColor.splice(idx, 1);
+            myChart.update();
+
+            // DOM 제거
+            item.remove();
+          }
+        });
+
+        // DOM 추가
+        item.appendChild(checkbox);
+        item.appendChild(text);
+        item.appendChild(button);
+        todoList.appendChild(item);
+
+        // 차트 데이터 추가
+        myChart.data.labels.push(value);
+        myChart.data.datasets[0].data.push(1); // 기본값 1
+        // 색상 순환해서 할당
+        const color = colors[myChart.data.labels.length % colors.length];
+        myChart.data.datasets[0].backgroundColor.push(color);
+
+        myChart.update();
+
+        input.value = '';
+        input.focus();
+      };
+
+      addButton.addEventListener('click', addTodo);
+      input.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') addTodo();
+      });
+    });
+  </script>
+</body>
+</html>

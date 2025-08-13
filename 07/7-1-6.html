@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const rects = document.querySelectorAll('.rect')
+
+        rects.forEach((rect, index) => {
+          const width = (index + 1) * 100
+          const src = `https://th.bing.com/th/id/OIP.UrXR1qdjg4E4yfKNAfTCwgHaJD?w=183&h=220&c=7&r=0&o=7&pid=1.7&rm=3/${width}/250`
+          rect.setAttribute('src', src)
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+    <img class="rect">
+  </body>
+</html>

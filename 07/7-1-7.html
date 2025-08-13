@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Colorful Divs</title>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const divs = document.querySelectorAll('body > div')
+
+        divs.forEach((div, index) => {
+          div.style.height = '20px'
+          div.style.backgroundColor = `hsl(${index * 10}, 80%, 60%)`
+        })
+      })
+    </script>
+  </head>
+  <body>
+    <!-- div 태그 25개 -->
+    <div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div>
+  </body>
+</html>

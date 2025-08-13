@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title></title>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+          const h1 = document.querySelector('h1')
+
+          h1.parentNode.removeChild(h1)
+        }, 3000)
+        })
+    </script>
+  </head>
+  <body>
+    <hr>
+    <h1>이 문서는 3초 후에 사라집니다.</h1>
+    <p>이 문서의 내용은 사라지지 않습니다.</p>
+  </body>
+</html>
