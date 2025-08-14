@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Document</title>
+    <!-- React와 ReactDOM 불러오기 -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- Babel: JSX 문법을 브라우저가 이해할 수 있게 변환 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <!-- React가 마운트될 루트 요소 -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+      // 메인 애플리케이션 컴포넌트
+      class App extends React.Component {
+        constructor (props) {
+          super(props)
+         
+          // state 초기화 (localStorage에서 불러오거나 기본값)
+          this.state = this.load()
+
+          // 메서드의 this 바인딩 (클래스 메서드에서 this 유지)
+          this.textChange = this.textChange.bind(this)
+          this.textKeyDown = this.textKeyDown.bind(this)
+          this.buttonClick = this.buttonClick.bind(this)
+          this.removeItem = this.removeItem.bind(this)
+          this.changeCheckData = this.changeCheckData.bind(this)
+        }
+
+        // 현재 state를 localStorage에 저장
+        save () {
+          localStorage.state = JSON.stringify(this.state)
+        }
+
+        // localStorage에서 state를 불러오거나 기본값 설정
+        load () {
+          let output
+          try {
+            output = JSON.parse(localStorage.state)
+          } catch (e) {}
+          // 저장된 데이터 구조 검증
+          if (output !== undefined
+            && output.keyCount !== undefined
+            && output.currentValue !== undefined)
+          {
+            output = JSON.parse(localStorage.state)
+          } else {
+            // 기본값
+            output = {
+              keyCount: 0,         // 각 할 일의 고유 키 생성용
+              currentValue:'',     // 현재 입력창의 값
+              todos: []            // 할 일 목록
+            }
+          }
+          return output
+        } 
+
+        // state가 변경될 때마다 저장
+        componentDidUpdate () {
+          this.save()
+        }
+
+        // UI 렌더링
+        render () {
+          return <div>
+            <h1>할 일 목록</h1>
+            {/* 입력창: 입력값 변경 & 엔터키 감지 */}
+            <input
+              value={this.state.currentValue}
+              onChange={this.textChange}
+              onKeyDown={this.textKeyDown} />
+            {/* 추가 버튼 */}
+            <button onClick={this.buttonClick}>추가하기</button>
+            <div>
+              {/* todos 배열을 TodoItem 컴포넌트 목록으로 변환 */}
+              {this.state.todos.map((todo) => {
+                return <TodoItem
+                  dataKey={todo.key}
+                  isDone={todo.isDone}
+                  text={todo.text}
+                  removeItem={this.removeItem}
+                  changeCheckData={this.changeCheckData} />
+              })}
+            </div>
+          </div>
+        }
+
+        // 입력창의 값 변경 시 state 업데이트
+        textChange (event) {
+          this.setState({
+            currentValue: event.target.value
+          })
+        }
+
+        // 엔터키 입력 시 추가 버튼 클릭 처리
+        textKeyDown (event) {
+          const ENTER = 13
+          if (event.keyCode === ENTER) {
+            this.buttonClick()
+          }
+        }
+
+        // 할 일 목록에 새 항목 추가
+        buttonClick (event) {
+          if (this.state.currentValue.trim() !== '') {
+            this.setState({
+              todos: [...this.state.todos, {
+                key: this.state.keyCount.toString(), // 고유 key
+                isDone: false,                       // 완료 여부
+                text: this.state.currentValue        // 입력한 내용
+              }]
+            })
+            // keyCount 증가 & 입력창 초기화
+            this.state.keyCount += 1
+            this.state.currentValue = ''
+          }
+        }
+
+        // 특정 key를 가진 할 일을 제거
+        removeItem (key) {
+          this.setState({
+            todos: this.state.todos.filter((todo) => {
+              return todo.key !== key
+            })
+          })
+        }
+
+        // 체크박스 변경 시 해당 항목의 완료 상태 수정
+        changeCheckData (key, changed) {
+          let target = [...this.state.todos]
+          target.filter((todo) => todo.key === key)[0].isDone = changed
+          this.setState({
+            todos: target
+          })
+        }
+      }
+
+      // 할 일 항목 컴포넌트
+      class TodoItem extends React.Component {
+        constructor (props) {
+          super(props)
+          // 개별 항목의 완료 여부 저장
+          this.state = {
+            isDone: props.isDone
+          }
+          this.checkboxClick = this.checkboxClick.bind(this)
+        }
+
+        // UI 렌더링
+        render () {
+          const textStyle = {}
+          // 완료 시 취소선 스타일 적용
+          textStyle.textDecoration
+            = this.state.isDone ? 'line-through' : ''
+          return (
+            <div style={textStyle}>
+              {/* 완료 여부 체크박스 */}
+              <input
+                type="checkbox"
+                checked={this.state.isDone}
+                onChange={this.checkboxClick} />
+              {/* 할 일 텍스트 */}
+              <span>{this.props.text}</span>
+              {/* 제거 버튼 */}
+              <button onClick={()=>this.props.removeItem(this.props.dataKey)}>제거
+              </button>
+            </div>
+          )
+        }
+
+        // 체크박스 클릭 시 완료 상태 변경
+        checkboxClick () {
+          const changed = !this.state.isDone
+          this.props.changeCheckData(this.props.dataKey, changed)
+        }
+
+        // 부모에서 isDone 값이 변경되면 state도 동기화
+        componentDidUpdate (prevProps) {
+          if (prevProps.isDone !== this.props.isDone) {
+            this.setState({
+              isDone: this.props.isDone
+            })
+          }
+        }
+      }
+
+      // ReactDOM을 통해 App 컴포넌트를 root에 마운트
+      const container = document.getElementById('root')
+      ReactDOM.render(<App />, container)
+    </script>
+  </body>
+</html>

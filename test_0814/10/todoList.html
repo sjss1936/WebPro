@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todo List</title>
+    <!-- 리액트 사용 준비 -->
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f8;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+      }
+
+      #root {
+        width: 400px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      .todo-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      }
+
+      input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+        outline: none;
+        font-size: 16px;
+      }
+
+      button {
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .todo-item span {
+        flex: 1;
+        margin-left: 10px;
+      }
+
+      .todo-item button {
+        background-color: #f44336;
+        margin-left: 10px;
+      }
+
+      .todo-item button:hover {
+        background-color: #e53935;
+      }
+
+      .completed {
+        text-decoration: line-through;
+        color: #999;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = this.load();
+
+          this.textChange = this.textChange.bind(this);
+          this.textKeyDown = this.textKeyDown.bind(this);
+          this.buttonClick = this.buttonClick.bind(this);
+          this.removeItem = this.removeItem.bind(this);
+          this.changeCheckData = this.changeCheckData.bind(this);
+        }
+
+        save() {
+          localStorage.state = JSON.stringify(this.state);
+        }
+
+        load() {
+          let output;
+          try { output = JSON.parse(localStorage.state); } catch(e) {}
+          if (output !== undefined
+            && output.keyCount !== undefined
+            && output.currentValue !== undefined) {
+            return output;
+          } else {
+            return { keyCount: 0, currentValue:'', todos: [] };
+          }
+        }
+
+        componentDidUpdate() {
+          this.save();
+        }
+
+        render() {
+          return (
+            <div className="todo-container">
+              <h1>할 일 목록</h1>
+              <div style={{display: "flex", marginBottom: "15px"}}>
+                <input
+                  type="text"
+                  placeholder="할 일을 입력하세요"
+                  value={this.state.currentValue}
+                  onChange={this.textChange}
+                  onKeyDown={this.textKeyDown} />
+                <button onClick={this.buttonClick}>추가</button>
+              </div>
+              <div>
+                {this.state.todos.map(todo => (
+                  <TodoItem
+                    key={todo.key}
+                    dataKey={todo.key}
+                    isDone={todo.isDone}
+                    text={todo.text}
+                    removeItem={this.removeItem}
+                    changeCheckData={this.changeCheckData} />
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        textChange(event) {
+          this.setState({ currentValue: event.target.value });
+        }
+
+        textKeyDown(event) {
+          if(event.key === 'Enter') this.buttonClick();
+        }
+
+        buttonClick() {
+          if(this.state.currentValue.trim() !== '') {
+            this.setState({
+              todos: [...this.state.todos, {
+                key: this.state.keyCount.toString(),
+                isDone: false,
+                text: this.state.currentValue
+              }],
+              currentValue: '',
+              keyCount: this.state.keyCount + 1
+            });
+          }
+        }
+
+        removeItem(key) {
+          this.setState({ todos: this.state.todos.filter(todo => todo.key !== key) });
+        }
+
+        changeCheckData(key, changed) {
+          let todos = [...this.state.todos];
+          const index = todos.findIndex(todo => todo.key === key);
+          if(index !== -1) todos[index].isDone = changed;
+          this.setState({ todos });
+        }
+      }
+
+      class TodoItem extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { isDone: props.isDone };
+          this.checkboxClick = this.checkboxClick.bind(this);
+        }
+
+        render() {
+          const className = this.state.isDone ? "todo-item completed" : "todo-item";
+          return (
+            <div className={className}>
+              <input
+                type="checkbox"
+                checked={this.state.isDone}
+                onChange={this.checkboxClick} />
+              <span>{this.props.text}</span>
+              <button onClick={() => this.props.removeItem(this.props.dataKey)}>삭제</button>
+            </div>
+          )
+        }
+
+        checkboxClick() {
+          const changed = !this.state.isDone;
+          this.props.changeCheckData(this.props.dataKey, changed);
+        }
+
+        componentDidUpdate(prevProps) {
+          if(prevProps.isDone !== this.props.isDone) {
+            this.setState({ isDone: this.props.isDone });
+          }
+        }
+      }
+
+      ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+  </body>
+</html>

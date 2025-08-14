@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rectangle Example</title>
+    <script>
+      class Rectangle {
+        constructor(width, height) {
+          // 유효성 검사
+          if (typeof width !== 'number' || typeof height !== 'number') {
+            throw new Error('width와 height는 숫자여야 합니다.')
+          }
+          if (width <= 0 || height <= 0) {
+            throw new Error('width와 height는 양수여야 합니다.')
+          }
+          this.width = width
+          this.height = height
+        }
+
+        // 사각형 둘레
+        getPerimeter() {
+          return 2 * (this.width + this.height)
+        }
+
+        // 사각형 넓이
+        getArea() {
+          return this.width * this.height
+        }
+
+        // 보기 좋게 toString 오버라이드
+        toString() {
+          return `Rectangle\n` +
+                 `  width: ${this.width}\n` +
+                 `  height: ${this.height}\n` +
+                 `  perimeter: ${this.getPerimeter()}\n` +
+                 `  area: ${this.getArea()}`
+        }
+      }
+
+      const rectangle = new Rectangle(10, 20)
+      console.log(rectangle.toString())
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
